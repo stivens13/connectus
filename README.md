@@ -2,43 +2,15 @@
 
 A solution for people to get in touch using nfc/bluetooth/qr code + transferring multiple personal entries, e.g. phone, email, Facebook, Instagram, Snapchat; at once. Ruby/Android
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-You should have one of supported platforms: macOS, Windows, Android, iOS, Ubuntu
-Access to internet
-Browser
+You should have one of supported platforms: macOS, Windows, Android, iOS, Ubuntu.
+Access to internet.
+Browser.
 
 ### Installing
 
 No installationg required, just go to our web app.
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
