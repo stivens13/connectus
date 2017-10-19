@@ -1,4 +1,4 @@
-# Project Connect.us
+# Project #5 - Connect.us
 
 A solution for people to get in touch using nfc/bluetooth/qr code + transferring multiple personal entries, e.g. phone, email, Facebook, Instagram, Snapchat; at once. Ruby/Android
 
