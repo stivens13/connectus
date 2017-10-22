@@ -28,7 +28,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 * **Csongor Farago** 
 * **Nikita Voloshenko** 
 * **Ugur Taysi** 
