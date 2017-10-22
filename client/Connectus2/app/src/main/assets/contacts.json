@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "name": "John Doe",
+      "phone": "534 234 4239",
+      "email": "john.doe@gmail.com"
+    },
+
+    {
+      "name": "Vitas",
+      "phone": "394 543 7884",
+      "email": "vitas@gmail.com"
+    },
+
+    {
+      "name": "Zeus",
+      "phone": "964 547 6784",
+      "email": "zeus@gmail.com"
+    },
+
+    {
+      "name": "Dionis",
+      "phone": "684 537 5478",
+      "email": "dionis@gmail.com"
+    },
+
+    {
+      "name": "Destiny",
+      "phone": "584 393 5643",
+      "email": "destiny@gmail.com"
+    }
+
+  ]
+}
