@@ -1,6 +1,7 @@
 package com.stivens.connectus;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,20 +16,31 @@ import java.util.ArrayList;
 
 public class Contact {
 
+    public int image;
     public String name;
     public String phone;
     public String email;
-    public String Facebook;
-    public String Instagram;
+    public String type;
+    public String fb;
+    public String inst;
+    public String snap;
+    public String linked;
 
     public static ArrayList<Contact> getContactsFromFile(String filename, Context context) {
         final ArrayList<Contact> contactsList = new ArrayList<>();
 
         try {
             // Load data
-            String jsonString = loadJsonFromAsset("recipes.json", context);
+            String jsonString = loadJsonFromAsset("contacts.json", context);
             JSONObject json = new JSONObject(jsonString);
-            JSONArray recipes = json.getJSONArray("recipes");
+            JSONArray recipes = json.getJSONArray("users");
+
+            if( recipes == null || json == null) {
+
+                Toast.makeText(context, "json was not opened", Toast.LENGTH_LONG).show();
+
+                return null;
+            }
 
             // Get Contact objects from data
             for (int i = 0; i < recipes.length(); i++) {
@@ -37,8 +49,31 @@ public class Contact {
                 recipe.name = recipes.getJSONObject(i).getString("name");
                 recipe.phone = recipes.getJSONObject(i).getString("phone");
                 recipe.email = recipes.getJSONObject(i).getString("email");
-//                recipe.Facebook = recipes.getJSONObject(i).getString("url");
-//                recipe.Instagram = recipes.getJSONObject(i).getString("dietLabel");
+                recipe.type = recipes.getJSONObject(i).getString("type");
+
+                if(  recipes.getJSONObject(i).getString("sex").equals("male") ) {
+                    recipe.image = R.drawable.avatar_default_male;
+                }
+                else {
+                    recipe.image = R.drawable.avatar_default_female;
+                }
+
+                if( recipes.getJSONObject(i).getString("fb") != null && !recipes.getJSONObject(i).getString("fb").isEmpty() ) {
+                    recipe.fb = recipes.getJSONObject(i).getString("fb");
+                }
+
+                if( recipes.getJSONObject(i).getString("inst") != null && !recipes.getJSONObject(i).getString("inst").isEmpty() ) {
+                    recipe.inst = recipes.getJSONObject(i).getString("inst");
+                }
+
+                if( recipes.getJSONObject(i).getString("linked") != null && !recipes.getJSONObject(i).getString("linked").isEmpty() ) {
+                    recipe.linked = recipes.getJSONObject(i).getString("linked");
+                }
+
+                if( recipes.getJSONObject(i).getString("snap") != null && !recipes.getJSONObject(i).getString("snap").isEmpty() ) {
+                    recipe.snap = recipes.getJSONObject(i).getString("snap");
+                }
+
 
                 contactsList.add(recipe);
             }
