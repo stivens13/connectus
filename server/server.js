@@ -185,6 +185,24 @@ db.connect(function(err){
       });                    
   }); 
 
+  //Create profile data
+  app.get('/createprofile', function (req, res) {
+    var userID = req.param('id');  
+    var json = {};
+    json["result"] = "false";
+
+    db.query('INSERT INTO users (id) VALUES (?)', [userID], function(dberr,dbres){
+        if(dberr){
+          json["error"] = dberr;
+          log(dberr)
+        }else{
+          json["result"] = "true";  
+        }
+        
+        res.send(json)
+    });           
+  });  
+
   //Edit profile data
   app.get('/editprofile', function (req, res) {
     var userID = req.param('id');  
