@@ -12,12 +12,14 @@
   var ip_address = '127.0.0.1'
   
   server.listen(port, ip_address, function () {
-    log(new Date() + " - Server up! Listening on " + ip_address + ":" + port);
+    log("Server up! Listening on " + ip_address + ":" + port);
   });
 
 ////////////////////////
 //      DataBase      //
 ////////////////////////
+
+var auth = {};
 
 var mysql = require("mysql");
 
@@ -30,8 +32,19 @@ var db = mysql.createConnection({
 });
 
 db.connect(function(err){
-  if(err){console.log('Error connecting to Db! error: '+err);return;}
-  console.log(new Date() + " - Database connection up!");
+  if(err){log('Error connecting to Db! error: '+err);return;}
+  log("Database connection up!");
+  
+  log("Caching Login table...");
+  db.query('SELECT * FROM login', function(dberr,rows){
+      if(dberr)
+          log(dberr)
+          
+      rows.forEach(function(row) {
+          auth[row.id] = row.pwd;
+        });
+        log("Login table Cached!");
+  });
 });
 
 
@@ -155,6 +168,57 @@ db.connect(function(err){
   
   
   //
+  // Authentication
+  //  
+
+  //checking login function
+  function authCheck(id,pwd){
+      if(!auth[id]) return false
+      if(!pwd) return false;
+      
+      if(auth[id] == pwd) return true;
+      
+      return false;
+  }
+  
+  //create login
+  app.get('/checklogin', function (req, res) {
+    var userID = req.param('id'); 
+    var userPWD = req.param('pwd');  
+    var json = {};
+    var auth = authCheck(userID,userPWD);
+
+    if(!auth){
+          json["result"] = "false"; 
+          json["error"] = "login_fail";
+          json["message"] = "Unsuccesfull login!";  
+    }else{
+          json["result"] = "true";  
+          json["message"] = "Succesfull login!";  
+    }
+    res.send(json)                   
+  }); 
+    
+  //create login
+  app.get('/createlogin', function (req, res) {
+    var userID = req.param('id'); 
+    var userPWD = req.param('pwd');  
+    var json = {};
+
+    db.query('INSERT INTO login (id, pwd) VALUES (?, ?)', [userID, userPWD], function(dberr,dbres){
+        if(dberr){
+          json["error"] = dberr;
+          log(dberr);
+        }else{
+          json["result"] = "true";  
+        }
+     
+        auth[userID] = userPWD;
+        res.send(json)
+    });                   
+  }); 
+    
+  //
   // PROFILE
   //  
 
@@ -185,6 +249,24 @@ db.connect(function(err){
       });                    
   }); 
 
+  //Create profile data
+  app.get('/createprofile', function (req, res) {
+    var userID = req.param('id');  
+    var json = {};
+    json["result"] = "false";
+
+    db.query('INSERT INTO users (id) VALUES (?)', [userID], function(dberr,dbres){
+        if(dberr){
+          json["error"] = dberr;
+          log(dberr)
+        }else{
+          json["result"] = "true";  
+        }
+        
+        res.send(json)
+    });           
+  });  
+
   //Edit profile data
   app.get('/editprofile', function (req, res) {
     var userID = req.param('id');  
@@ -210,5 +292,5 @@ db.connect(function(err){
 ////////////////////////
 
   function log(text){
-      console.log(text);
+      console.log(new Date().toLocaleString() + " - " + text);
   }
