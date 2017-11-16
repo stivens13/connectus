@@ -2,7 +2,7 @@
   "users": [
     {
       "name": "John Doe",
-      "phone": "534 234 4239",
+      "phone": "5342344239",
       "email": "john.doe@gmail.com",
       "avatar": "johndoe.png",
       "sex": "male",
@@ -15,7 +15,7 @@
 
     {
       "name": "Vitas",
-      "phone": "394 543 7884",
+      "phone": "3945437884",
       "email": "vitas@gmail.com",
       "avatar": "vitas.png",
       "sex": "male",
@@ -29,7 +29,7 @@
 
     {
       "name": "Zeus",
-      "phone": "964 547 6784",
+      "phone": "9645476784",
       "email": "zeus@gmail.com",
       "avatar": "zeus.png",
       "sex": "male",
@@ -42,7 +42,7 @@
 
     {
       "name": "Dionis",
-      "phone": "684 537 5478",
+      "phone": "6845375478",
       "email": "dionis@gmail.com",
       "avatar": "dionis.png",
       "sex": "male",
@@ -55,7 +55,7 @@
 
     {
       "name": "Destiny",
-      "phone": "584 393 5643",
+      "phone": "5843935643",
       "email": "destiny@gmail.com",
       "avatar": "destiny",
       "sex": "female",

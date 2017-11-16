@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextView;
     private TextView num;
     private EditText edtNum;
-    private String register = 
-    String url = "localhost:8080";
+    private String register = "/createprofile";
+    private String editprofile = "/editprofile";
+    String port = "8081";
+    String url = "http://10.250.202.107:" + port;
 //    RequestQueue queue = Volley.newRequestQueue(this);
 
 
@@ -45,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.contact_list_view);
 
         mListView.setAdapter(adapter);
+
+        for(Contact user: contactList){
+            registerUser(user);
+            Log.v("user", user.phone);
+        }
 
         FloatingActionButton btnAddUser = (FloatingActionButton) findViewById(R.id.btnAddUser);
 
@@ -91,45 +99,75 @@ public class MainActivity extends AppCompatActivity {
     protected void getUser(String id) {
 
     }
+
     protected void registerUser(Contact user) {
 
-    RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
 
-    String request = url +
+        if(user.phone == null || user.phone.equals(""))
+            return;
+
+        sendRequest(url + register + "?" + "id=" + user.phone);
+
+        completeRegiser(user);
+
+    }
+    private void completeRegiser(Contact user) {
+
+
+        if( user.email != null ) {
+            sendRequest(generate_string(user.phone, "email", user.email));
+            Log.v("input", generate_string(user.phone, "email", user.email));
+        }
+
+        if( user.fb != null ) {
+            sendRequest(generate_string(user.phone, "fb", user.fb));
+            Log.v("input", generate_string(user.phone, "fb", user.fb));
+        }
+
+        if( user.inst != null ) {
+            sendRequest(generate_string(user.phone, "inst", user.inst));
+            Log.v("input", generate_string(user.phone, "inst", user.inst));
+        }
+
+        if( user.snap != null ) {
+            sendRequest(generate_string(user.phone, "snap", user.snap));
+            Log.v("input", generate_string(user.phone, "snap", user.snap));
+        }
+    }
+
+    private String generate_string(String id, String type, String data) {
+
+        return String.format("%s%s?id=%s&name=%s&data=%s ", url, editprofile, id, type, data);
+
+    }
+
+    private void sendRequest(String request) {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+
+//        mTextView = (TextView) findViewById(R.id.txtResponse);
 //
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+////
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        mTextView.setText("Response is: "+ response.substring(0,500));
+                        Log.v("response", response.substring(0,500));
+//                        mTextView.setText("Response is: "+ response.substring(0,500));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mTextView.setText("That didn't work!");
+                Log.v("response", error.getMessage());
             }
         });
-// Add the request to the RequestQueue.
+//// Add the request to the RequestQueue.
         queue.add(stringRequest);
 
     }
-//    private void loadContacts() {
-//
-//        Faker faker;
-//        Contact contact;
-//
-//        for(int i = 0; i < 10; i += 1) {
-//
-//            faker = new Faker();
-//
-//            contact = new Contact();
-//
-//            contact.name = faker.name().fullName();
-//            contact.phone = faker.phoneNumber().cellPhone();
-//            contact.email = "john.doe@gmail.com";
-//        }
-//    }
 
 
 
