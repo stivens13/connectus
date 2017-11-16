@@ -94,15 +94,15 @@ public class ContactAdapter extends BaseAdapter {
 
 
         // && contact.fb != null) { //!contact.fb.isEmpty()
-        if( contact.fb != null ) {
-            ImageView fb = new ImageView(mContext);
-            fb.setImageResource(R.drawable.fb);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.addRule(RelativeLayout., R.id.contact_list_email);
-            fb.setLayoutParams(lp);
-            rl.addView(fb);
-
-        }
+//        if( contact.fb != null ) {
+//            ImageView fb = new ImageView(mContext);
+//            fb.setImageResource(R.drawable.fb);
+//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            lp.addRule(RelativeLayout.ALIGN_END, R.id.contact_list_email);
+//            fb.setLayoutParams(lp);
+//            rl.addView(fb);
+//
+//        }
 
         holder.contactType.setTextColor(ContextCompat.getColor(mContext, LABEL_COLORS.get(contact.type)));
 

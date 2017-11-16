@@ -16,5 +16,20 @@
 
     </ListView>
 
+    <TextView
+        android:id="@+id/txtResponse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAddUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_circle"
+        app:layout_anchor="@id/contact_list_view"
+        app:layout_anchorGravity="bottom|right|end" />
+
 
 </RelativeLayout>

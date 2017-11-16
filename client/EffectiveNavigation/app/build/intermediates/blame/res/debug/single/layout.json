@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/build/intermediates/res/merged/debug/layout/fragment_section_launchpad.xml",
+        "source": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/src/main/res/layout/fragment_section_launchpad.xml"
+    },
+    {
+        "merged": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/build/intermediates/res/merged/debug/layout/activity_collection_demo.xml",
+        "source": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/src/main/res/layout/activity_collection_demo.xml"
+    },
+    {
+        "merged": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/build/intermediates/res/merged/debug/layout/fragment_section_dummy.xml",
+        "source": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/src/main/res/layout/fragment_section_dummy.xml"
+    },
+    {
+        "merged": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/build/intermediates/res/merged/debug/layout/activity_main.xml",
+        "source": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/build/intermediates/res/merged/debug/layout/fragment_collection_object.xml",
+        "source": "/Users/stivens/Developing/connectus/client/EffectiveNavigation/app/src/main/res/layout/fragment_collection_object.xml"
+    }
+]

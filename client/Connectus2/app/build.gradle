@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.stivens.connectus"
         minSdkVersion 19
@@ -31,4 +31,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile group: 'com.github.javafaker', name: 'javafaker', version: '0.13'
     compile 'com.github.javafaker:javafaker:0.13'
+    compile 'com.android.support:design:+'
+    compile 'com.android.volley:volley:+'
 }
