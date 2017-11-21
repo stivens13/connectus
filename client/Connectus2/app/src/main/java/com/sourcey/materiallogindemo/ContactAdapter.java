@@ -1,4 +1,4 @@
-package com.stivens.connectus;
+package com.sourcey.materiallogindemo;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -61,22 +61,20 @@ public class ContactAdapter extends BaseAdapter {
 
         ViewHolder holder;
 
-        if(convertView == null) {
+        if (convertView == null) {
 
             convertView = mInflater.inflate(R.layout.list_item_contact, parent, false);
 
             // 3
             holder = new ViewHolder();
-            holder.contactImage = convertView.findViewById(R.id.contact_list_thumbnail);
-            holder.contactName = convertView.findViewById(R.id.contact_list_name);
-            holder.contactPhone = convertView.findViewById(R.id.contact_list_phone);
-            holder.contactEmail = convertView.findViewById(R.id.contact_list_email);
-            holder.contactType = convertView.findViewById(R.id.contact_list_type);
+            holder.contactImage =(ImageView) convertView.findViewById(R.id.contact_list_thumbnail);
+            holder.contactName = (TextView) convertView.findViewById(R.id.contact_list_name);
+            holder.contactPhone =(TextView) convertView.findViewById(R.id.contact_list_phone);
+            holder.contactEmail =(TextView) convertView.findViewById(R.id.contact_list_email);
+            holder.contactType = (TextView) convertView.findViewById(R.id.contact_list_type);
 
             convertView.setTag(holder);
-        }
-
-         else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -90,7 +88,6 @@ public class ContactAdapter extends BaseAdapter {
         holder.contactType.setText(contact.type);
 
         RelativeLayout rl = (RelativeLayout) convertView.findViewById(R.id.rl);
-
 
 
         // && contact.fb != null) { //!contact.fb.isEmpty()
@@ -120,6 +117,5 @@ public class ContactAdapter extends BaseAdapter {
         public TextView contactEmail;
         public TextView contactType;
     }
-
 
 }

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="141dp"
+        android:layout_marginTop="142dp"
         android:text="Number"
         android:textSize="30dp"
         tools:layout_editor_absoluteX="128dp"

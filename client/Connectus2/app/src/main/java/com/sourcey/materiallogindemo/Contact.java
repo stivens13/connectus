@@ -1,4 +1,4 @@
-package com.stivens.connectus;
+package com.sourcey.materiallogindemo;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -104,3 +104,4 @@ public class Contact {
     }
 
 }
+

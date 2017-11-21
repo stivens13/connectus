@@ -1,10 +1,13 @@
-package com.stivens.connectus;
+package com.sourcey.materiallogindemo;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +24,9 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 
+//import android.support.v7.app.ActionBarActivity;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
@@ -31,21 +37,26 @@ public class MainActivity extends AppCompatActivity {
     private EditText edtNum;
     private String register = "/createprofile";
     private String editprofile = "/editprofile";
-    String port = "8081";
-    String url = "http://10.250.202.107:" + port;
-//    RequestQueue queue = Volley.newRequestQueue(this);
-
+    String port = "8080";
+    String url = "ec2-34-210-242-157.us-west-2.compute.amazonaws.com:" + port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
         final ArrayList<Contact> contactList = Contact.getContactsFromFile("contacts.json", this);
 
         ContactAdapter adapter = new ContactAdapter(this, contactList);
 
-        mListView = (ListView) findViewById(R.id.contact_list_view);
+        Log.v("contactList", contactList.toString());
+
+        mListView = findViewById(R.id.contact_list_view);
+
 
         mListView.setAdapter(adapter);
 
@@ -67,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     protected void addUserCallScreen() {
 
@@ -92,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mDialog.show();
-
-
     }
 
     protected void getUser(String id) {
@@ -112,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         completeRegiser(user);
 
     }
+
     private void completeRegiser(Contact user) {
 
 
@@ -147,21 +159,21 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
 
-//        mTextView = (TextView) findViewById(R.id.txtResponse);
-//
-////
         StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
                         Log.v("response", response.substring(0,500));
-//                        mTextView.setText("Response is: "+ response.substring(0,500));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("response", error.getMessage());
+                try {
+                    Log.v("response", error.getLocalizedMessage());
+                }
+                catch (Exception e) {
+                    Log.v("error", e.getMessage());
+                }
             }
         });
 //// Add the request to the RequestQueue.
@@ -169,6 +181,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
