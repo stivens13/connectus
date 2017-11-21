@@ -8,7 +8,7 @@
   , app = express()
   , server = require('http').createServer(app)
   
-  var port = 80
+  var port = 8080
   var ip_address = '127.0.0.1'
   
   server.listen(port, ip_address, function () {
