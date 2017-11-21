@@ -9,7 +9,7 @@
   , server = require('http').createServer(app)
   
   var port = 8080
-  var ip_address = '34.210.242.157'
+  var ip_address = 'ec2-34-210-242-157.us-west-2.compute.amazonaws.com'
   
   server.listen(port, ip_address, function () {
     log("Server up! Listening on " + ip_address + ":" + port);
