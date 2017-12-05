@@ -115,7 +115,7 @@ db.connect(function(err){
     var row={};
     row['user1'] = userID1;
     row['user2'] = userID2;
-    row['pending'] = 1;
+    row['pending'] = 0; //change to 1 to force acception
     db.query('INSERT INTO connections SET ?', row, function(dberr,dbres){
         if(dberr){
           json["error"] = dberr;
