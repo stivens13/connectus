@@ -2,6 +2,7 @@ package com.sourcey.connectus;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +34,9 @@ public class ContactAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Contact> mDataSource;
+    String res;
+
+    private final String TAG = "ContactAdapter";
 
 //    final ArrayList<Contact> contactList = Contact.getContactsFromFile("contacts.json", this);
 
@@ -36,7 +50,15 @@ public class ContactAdapter extends BaseAdapter {
 
     public ContactAdapter(Context context) {
         mContext = context;
-        mDataSource = Contact.getContactsFromFile("contacts.json", context);
+//        mDataSource = Contact.getContactsFromFile("contacts.json", context);
+//        mDataSource =
+        sendRequest(MainActivity.generateStringConnections(MainActivity.userPhoneNumber));
+
+    }
+
+    public void ContactAdapterHelper() {
+        JSONObject req = MainActivity.stringToJSON(res);
+        mDataSource = Contact.getContactsFromServer(req, mContext);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -54,6 +76,12 @@ public class ContactAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void addNewContact(Contact contact) {
+        if(contact != null) {
+            mDataSource.add(0, contact);
+        }
     }
 
     @Override
@@ -91,15 +119,16 @@ public class ContactAdapter extends BaseAdapter {
 
 
         // && contact.fb != null) { //!contact.fb.isEmpty()
-//        if( contact.fb != null ) {
-//            ImageView fb = new ImageView(mContext);
-//            fb.setImageResource(R.drawable.fb);
-//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//            lp.addRule(RelativeLayout.ALIGN_END, R.id.contact_list_email);
-//            fb.setLayoutParams(lp);
-//            rl.addView(fb);
-//
-//        }
+        int counter = 0;
+        if( contact.fb != null ) {
+            ImageView fb = new ImageView(mContext);
+            fb.setImageResource(R.drawable.fb);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_END, R.id.contact_list_type);
+            fb.setLayoutParams(lp);
+            rl.addView(fb, counter);
+            counter ++;
+        }
 
         holder.contactType.setTextColor(ContextCompat.getColor(mContext, LABEL_COLORS.get(contact.type)));
 
@@ -116,6 +145,37 @@ public class ContactAdapter extends BaseAdapter {
         public TextView contactPhone;
         public TextView contactEmail;
         public TextView contactType;
+    }
+
+    private void sendRequest(String request) {
+
+        Log.d(TAG, " sendRequest()");
+
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        res = response;
+                        ContactAdapterHelper();
+                        Toast.makeText(mContext, res, Toast.LENGTH_LONG).show();
+                        Log.v(TAG, "The response is" + response);
+//                        status = true;
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    Log.v(TAG, "Try error: " + error.getLocalizedMessage());
+                }
+                catch (Exception e) {
+                    Log.v(TAG, "Catch error" + e.getMessage());
+                }
+            }
+        });
+        queue.add(stringRequest);
+
     }
 
 }

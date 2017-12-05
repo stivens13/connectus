@@ -23,6 +23,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
 import java.util.Iterator;
 
 //import android.support.v7.app.ActionBarActivity;
@@ -34,16 +36,27 @@ public class MainActivity extends AppCompatActivity {
     private Dialog mDialog;
     private Button btnSendFind;
     private TextView mTextView;
-    private TextView num;
+    public TextView num;
     private EditText edtNum;
 
+    protected static ContactAdapter contactAdapter;
+
+    public static String userPhoneNumber;
     public static String register = "/createprofile";
     public static String editprofile = "/editprofile";
     public static String createlogin = "/createlogin";
     public static String checklogin = "/checklogin";
+    public static String connect = "/connect";
+    public static String connections = "/connections";
     private String TAG = "MainActivity";
     public static String port = "8080";
+
     public static String url = "http://ec2-34-210-242-157.us-west-2.compute.amazonaws.com:" + port;
+
+//    public static String port = "8081";
+//    public static String url = "http://127.0.0.1" + port;
+
+    private String res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +74,12 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
 
-
-
-        ContactAdapter adapter = new ContactAdapter(this);
-
+        contactAdapter = new ContactAdapter(this);
 
         mListView = findViewById(R.id.contact_list_view);
 
 
-        mListView.setAdapter(adapter);
+        mListView.setAdapter(contactAdapter);
 
 
         FloatingActionButton btnAddUser = (FloatingActionButton) findViewById(R.id.btnAddUser);
@@ -92,9 +102,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public static JSONObject stringToJSON(String req) {
+
+        JSONObject json = null;
+
+        if(req != null && !req.equals("")) {
+            try {
+                json = new JSONObject(req);
+            }
+
+            catch (Exception err) {
+                Log.e("String to json", err.getMessage());
+            }
+        }
+
+        return json;
+    }
+
 
 
     protected void addUserCallScreen() {
+
+//        final boolean status = true;
 
         Log.d(TAG, "Main addUserCallScreen()");
 
@@ -110,7 +139,21 @@ public class MainActivity extends AppCompatActivity {
         btnSendFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Hi there", Toast.LENGTH_SHORT).show();
+                if(edtNum.getText() != null || !edtNum.getText().toString().equals("") ) {
+                    try {
+                        sendRequest(generateStringConnect(userPhoneNumber, edtNum.getText().toString()));
+                        Contact contact = new Contact(stringToJSON(res));
+                        contactAdapter.addNewContact(contact);
+                        contactAdapter.notifyDataSetChanged();
+
+                    }
+                    catch (Exception err) {
+                        Log.v(TAG, err.getMessage());
+//                        status = false;
+                    }
+                }
+
+                Toast.makeText(getApplicationContext(), "Hi there", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -163,6 +206,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private String generateStringConnect(String id1, String id2) {
+
+        return String.format("%s%s?id1=%s&id2=%s", url, connect, id1, id2);
+
+    }
+
+    static String generateStringConnections(String id) {
+        return String.format("%s%s?id=%s", url, connections, id);
+    }
+
     private void sendRequest(String request) {
 
         Log.d(TAG, " sendRequest()");
@@ -170,20 +223,24 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
 
+        boolean status = false;
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.v(TAG, response);
+                        res = response;
+                        Log.v(TAG, "The response is" + response);
+//                        status = true;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    Log.v(TAG, error.getLocalizedMessage());
+                    Log.v(TAG, "Try error: " + error.getLocalizedMessage());
                 }
                 catch (Exception e) {
-                    Log.v(TAG, e.getMessage());
+                    Log.v(TAG, "Catch error" + e.getMessage());
                 }
             }
         });

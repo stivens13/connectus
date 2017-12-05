@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -31,7 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     private String createlogin = MainActivity.createlogin;
     private String checklogin = MainActivity.checklogin;
 
-    boolean status = true;
+    private RequestQueue queue;
+
+    boolean status;
 
     @Bind(R.id.input_phone) EditText _phone;
     @Bind(R.id.input_password) EditText _passwordText;
@@ -43,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        queue = Volley.newRequestQueue(this);
         
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -81,17 +86,17 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String phone = _phone.getText().toString();
+        final String phone = _phone.getText().toString();
         String password = _passwordText.getText().toString();
 
         status = true;
 
         try {
-            sendRequest(generate_string_login(phone, password, checklogin));
-            if (!status) {
-                onLoginFailed();
-                return;
-            }
+            sendRequest(generate_string_login(phone, password, checklogin), progressDialog, phone);
+//            if (!status) {
+//                onLoginFailed();
+//                return;
+//            }
         }
 
 
@@ -99,22 +104,23 @@ public class LoginActivity extends AppCompatActivity {
             Log.v(TAG, e.toString());
         }
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-
-                        if(status) {
-                            onLoginSuccess();
-                        }
-
-                        else {
-                            onLoginFailed();
-                        }
-
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        // On complete call either onLoginSuccess or onLoginFailed
+//
+//                        if(status) {
+//                            onLoginSuccess();
+//                            MainActivity.userPhoneNumber = phone;
+//                        }
+//
+//                        else {
+//                            onLoginFailed();
+//                        }
+//
+//                        progressDialog.dismiss();
+//                    }
+//                }, 3000);
     }
 
     private String generate_string_login(String id, String pass, String meth) {
@@ -128,18 +134,47 @@ public class LoginActivity extends AppCompatActivity {
 //
 //    }
 
-    private void sendRequest(String request) {
+    private void sendRequest(String request, final ProgressDialog progressDialog, final String phone) {
 
         Log.d(TAG, " sendRequest()");
 
-        RequestQueue queue = Volley.newRequestQueue(this);
 
 
+//        String res = null;
+
+        RequestFuture<String> future = RequestFuture.newFuture();
+
+
+        Toast.makeText(getBaseContext(), request, Toast.LENGTH_LONG).show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+//                        res = response;
+                        Toast.makeText(getBaseContext(), response, Toast.LENGTH_LONG).show();
+                        if(response.contains("error")) {
+                            status = false;
+                        }
+
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        // On complete call either onLoginSuccess or onLoginFailed
+
+                                        if(status) {
+                                            onLoginSuccess();
+                                            MainActivity.userPhoneNumber = phone;
+                                        }
+
+                                        else {
+                                            onLoginFailed();
+                                        }
+
+                                        progressDialog.dismiss();
+                                    }
+                                }, 3000);
+
                         Log.v(TAG, response);
                     }
                 }, new Response.ErrorListener() {
@@ -148,6 +183,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 status = false;
+                Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // On complete call either onLoginSuccess or onLoginFailed
+
+                                if(status) {
+                                    onLoginSuccess();
+                                    MainActivity.userPhoneNumber = phone;
+                                }
+
+                                else {
+                                    onLoginFailed();
+                                }
+
+                                progressDialog.dismiss();
+                            }
+                        }, 3000);
 
                 try {
                     Log.v(TAG, error.getLocalizedMessage());
