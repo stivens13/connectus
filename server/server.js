@@ -56,6 +56,7 @@ db.connect(function(err){
   app.get('/connections', function (req, res) {
     var userID = req.param('id');
     var json = {};
+    json["id"] = userID;
     json["users"] = [];
     var pending = {};    
         
