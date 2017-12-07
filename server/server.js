@@ -61,10 +61,11 @@ db.connect(function(err){
     var pending = {};    
         
     var connectionsCount = 0;    
-    db.query('SELECT * FROM connections WHERE user1 = ? or user2 = ? ', [userID,userID] , function(err,rows){
+    db.query('SELECT * FROM connections WHERE user1 = ? OR user2 = ? ', [userID,userID] , function(err,rows){
         if(err) console.log(err);
         
         connections = rows.length; 
+        json["count"] = rows.length;
         
         for(i=0; i<rows.length; i++){
           if(rows[i].user1 != userID) connectionID = rows[i].user1;
