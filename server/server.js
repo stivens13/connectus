@@ -8,8 +8,13 @@
   , app = express()
   , server = require('http').createServer(app)
   
-  var port = 8080
-  var ip_address = 'ec2-34-210-242-157.us-west-2.compute.amazonaws.com'
+// <<<<<<< HEAD
+  var port = 8081
+  var ip_address = '127.0.0.1'
+// =======
+  // var port = 8080
+  // var ip_address = 'ec2-34-210-242-157.us-west-2.compute.amazonaws.com'
+// >>>>>>> 0ff8bc143454fc5bc7c5f7824078cc24722a149e
   
   server.listen(port, ip_address, function () {
     log("Server up! Listening on " + ip_address + ":" + port);
@@ -158,7 +163,7 @@ db.connect(function(err){
         if(dberr){
           json["error"] = dberr;
           log(dberr)
-        }else{
+        } else {
           json["result"] = "true";  
         }
         
