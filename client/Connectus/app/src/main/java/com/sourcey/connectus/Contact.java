@@ -173,6 +173,8 @@ public class Contact {
                 return null;
             }
 
+            Toast.makeText(context, "json was opened", Toast.LENGTH_LONG).show();
+
             // Get Contact objects from data
             for (int i = 0; i < users.length(); i++) {
                 Contact contact = new Contact();

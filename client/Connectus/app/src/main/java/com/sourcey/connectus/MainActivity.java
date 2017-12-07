@@ -1,6 +1,7 @@
 package com.sourcey.connectus;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -49,12 +50,15 @@ public class MainActivity extends AppCompatActivity {
     public static String connect = "/connect";
     public static String connections = "/connections";
     private String TAG = "MainActivity";
-    public static String port = "8080";
 
+
+    private Context mContext;
+
+    public static String port = "8080";
     public static String url = "http://ec2-34-210-242-157.us-west-2.compute.amazonaws.com:" + port;
 
-//    public static String port = "8081";
-//    public static String url = "http://127.0.0.1" + port;
+//    public static String port = "8080";
+//    public static String url = "http://127.0.0.1:" + port;
 
     private String res;
 
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "Main started");
 
+        mContext = this;
+
         initiateAdapter();
     }
 
@@ -74,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
 
-        contactAdapter = new ContactAdapter(this);
+        contactAdapter = new ContactAdapter(this, userPhoneNumber);
 
         mListView = findViewById(R.id.contact_list_view);
 
@@ -141,11 +147,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(edtNum.getText() != null || !edtNum.getText().toString().equals("") ) {
                     try {
-                        sendRequest(generateStringConnect(userPhoneNumber, edtNum.getText().toString()));
-                        Contact contact = new Contact(stringToJSON(res));
-                        contactAdapter.addNewContact(contact);
-                        contactAdapter.notifyDataSetChanged();
-
+                        sendRequestConnect(generateStringConnect(userPhoneNumber, edtNum.getText().toString()), mDialog);
                     }
                     catch (Exception err) {
                         Log.v(TAG, err.getMessage());
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                Toast.makeText(getApplicationContext(), "Hi there", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Hi there", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -214,6 +216,48 @@ public class MainActivity extends AppCompatActivity {
 
     static String generateStringConnections(String id) {
         return String.format("%s%s?id=%s", url, connections, id);
+    }
+
+    private void sendRequestConnect(String request, final Dialog mDialog) {
+
+        Log.d(TAG, " sendRequest()");
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        Toast.makeText(getApplicationContext(), request, Toast.LENGTH_LONG).show();
+
+
+        boolean status = false;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        res = response;
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                        Contact contact = new Contact(stringToJSON(response));
+                        if(contactAdapter == null)
+                            contactAdapter = new ContactAdapter(mContext);
+
+                        contactAdapter.addNewContact(contact);
+                        contactAdapter.notifyDataSetChanged();
+                        Log.v(TAG, "The response is" + response);
+                        mDialog.dismiss();
+//                        status = true;
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    Log.v(TAG, "Try error: " + error.getLocalizedMessage());
+                }
+                catch (Exception e) {
+                    Log.v(TAG, "Catch error" + e.getMessage());
+                }
+            }
+        });
+        queue.add(stringRequest);
+
     }
 
     private void sendRequest(String request) {

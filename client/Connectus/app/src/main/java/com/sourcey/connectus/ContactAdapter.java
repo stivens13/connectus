@@ -56,6 +56,14 @@ public class ContactAdapter extends BaseAdapter {
 
     }
 
+    public ContactAdapter(Context context, String phone) {
+        mContext = context;
+//        mDataSource = Contact.getContactsFromFile("contacts.json", context);
+//        mDataSource =
+        sendRequest(MainActivity.generateStringConnections(phone));
+
+    }
+
     public void ContactAdapterHelper() {
         JSONObject req = MainActivity.stringToJSON(res);
         mDataSource = Contact.getContactsFromServer(req, mContext);
@@ -64,7 +72,8 @@ public class ContactAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mDataSource.size();
+        if (mDataSource == null) return 0;
+        else return mDataSource.size();
     }
 
     //2
@@ -80,7 +89,12 @@ public class ContactAdapter extends BaseAdapter {
 
     public void addNewContact(Contact contact) {
         if(contact != null) {
-            mDataSource.add(0, contact);
+            if(mDataSource != null)
+                mDataSource.add(0, contact);
+            else {
+                mDataSource = new ArrayList<>();
+                mDataSource.add(contact);
+            }
         }
     }
 
@@ -88,6 +102,8 @@ public class ContactAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
+
+        if(parent == null) return null;
 
         if (convertView == null) {
 
