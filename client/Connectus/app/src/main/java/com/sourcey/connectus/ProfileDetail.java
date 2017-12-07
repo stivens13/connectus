@@ -26,7 +26,8 @@ public class ProfileDetail extends AppCompatActivity {
 //        TextView txtEmail = findViewById(R.id.txtEmail);
         TextView txtEmailHolder = findViewById(R.id.txtEmailHolder);
 
-        Contact contact = (Contact) MainActivity.contactAdapter.getItem(pos);
+//        Contact contact = (Contact) MainActivity.contactAdapter.getItem(pos);
+        Contact contact = (Contact) MainActivity.currContact;
         profileImg.setImageResource( contact.image );
         txtProfileName.setText(contact.name);
         txtProfilePhone.setText(MainActivity.format_phone(contact.phone));

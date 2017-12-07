@@ -40,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
     public TextView num;
     private EditText edtNum;
 
-    protected static ContactAdapter contactAdapter;
+//    protected ArrayList<Contact> contactList;
+
+    protected ContactAdapter contactAdapter;
+    protected static Contact currContact;
 
     public static String userPhoneNumber;
     public static String register = "/createprofile";
@@ -71,16 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
 
-        initiateAdapter();
-    }
-
-
-    protected void initiateAdapter() {
-
-        final Intent intent = new Intent(this, LoginActivity.class);
+        final Intent intent = new Intent(mContext, LoginActivity.class);
         startActivity(intent);
 
-        contactAdapter = new ContactAdapter(this, userPhoneNumber);
+//        contactAdapter = new ContactAdapter(this, userPhoneNumber);
+        contactAdapter = new ContactAdapter(mContext);
 
         mListView = findViewById(R.id.contact_list_view);
 
@@ -91,18 +89,57 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton btnAddUser = (FloatingActionButton) findViewById(R.id.btnAddUser);
 
 
-        btnAddUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addUserCallScreen();
-            }
-        });
+//        btnAddUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                addUserCallScreen();
+//            }
+//        });
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent newIntent = new Intent(getApplicationContext(), ProfileDetail.class);
                 newIntent.putExtra("Position", i);
+                currContact = (Contact) contactAdapter.getItem(i);
+                startActivity(newIntent);
+            }
+        });
+
+//        initiateAdapter();
+    }
+
+
+    protected void initiateAdapter() {
+
+        final Intent intent = new Intent(mContext, LoginActivity.class);
+        startActivity(intent);
+
+//        contactAdapter = new ContactAdapter(this, userPhoneNumber);
+        contactAdapter = new ContactAdapter(mContext);
+
+        mListView = findViewById(R.id.contact_list_view);
+
+
+        mListView.setAdapter(contactAdapter);
+
+
+        FloatingActionButton btnAddUser = (FloatingActionButton) findViewById(R.id.btnAddUser);
+
+
+//        btnAddUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                addUserCallScreen();
+//            }
+//        });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent newIntent = new Intent(getApplicationContext(), ProfileDetail.class);
+                newIntent.putExtra("Position", i);
+                currContact = (Contact) contactAdapter.getItem(i);
                 startActivity(newIntent);
             }
         });
@@ -236,8 +273,9 @@ public class MainActivity extends AppCompatActivity {
                         res = response;
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                         Contact contact = new Contact(stringToJSON(response));
-                        if(contactAdapter == null)
-                            contactAdapter = new ContactAdapter(mContext);
+
+//                        if(contactAdapter == null)
+//                            contactAdapter = new ContactAdapter(mContext);
 
                         contactAdapter.addNewContact(contact);
                         contactAdapter.notifyDataSetChanged();

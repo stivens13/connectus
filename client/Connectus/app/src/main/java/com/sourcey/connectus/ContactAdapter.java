@@ -50,9 +50,9 @@ public class ContactAdapter extends BaseAdapter {
 
     public ContactAdapter(Context context) {
         mContext = context;
-//        mDataSource = Contact.getContactsFromFile("contacts.json", context);
+        mDataSource = Contact.getContactsFromFile("contacts.json", context);
 //        mDataSource =
-        sendRequest(MainActivity.generateStringConnections(MainActivity.userPhoneNumber));
+//        sendRequest(MainActivity.generateStringConnections(MainActivity.userPhoneNumber));
 
     }
 
@@ -68,6 +68,11 @@ public class ContactAdapter extends BaseAdapter {
         JSONObject req = MainActivity.stringToJSON(res);
         mDataSource = Contact.getContactsFromServer(req, mContext);
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public ArrayList<Contact> getContactList() {
+
+        return mDataSource;
     }
 
     @Override
@@ -107,8 +112,13 @@ public class ContactAdapter extends BaseAdapter {
 
         if (convertView == null) {
 
-            convertView = mInflater.inflate(R.layout.list_item_contact, parent, false);
+//            if(parent == null)
+//                convertView = mInflater.inflate(R.layout.list_item_contact, parent);
+//
+//            else
+//                convertView = mInflater.inflate(R.layout.list_item_contact, parent, false);
 
+            convertView = mInflater.inflate(R.layout.list_item_contact, parent, false);
             // 3
             holder = new ViewHolder();
             holder.contactImage =(ImageView) convertView.findViewById(R.id.contact_list_thumbnail);
